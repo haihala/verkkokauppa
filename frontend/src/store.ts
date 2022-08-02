@@ -1,16 +1,19 @@
-import { Item } from "./models";
+import { makeAutoObservable } from "mobx";
+
+import { Cat, Item } from "./models";
 
 export class Store {
   backend_base_url: string;
   items: Item[];
+  cats: Cat[];
 
   constructor(backend: string) {
     this.backend_base_url = backend;
 
     this.items = [];
+    this.cats = [];
 
-    // Awaiting can't be done in the constructor
-    this.populate();
+    makeAutoObservable(this);
   }
 
   async get<T>(endpoint: string): Promise<T> {
@@ -20,10 +23,12 @@ export class Store {
         "Accept-Control-Allow-Origin": "*",
       },
     });
-    return request.json();
+    return await request.json();
   }
 
-  async populate() {
+  // Awaiting can't be done in the constructor
+  public async populate() {
     this.items = await this.get<Item[]>("items");
+    this.cats = await this.get<Cat[]>("cats");
   }
 }
