@@ -25,5 +25,5 @@ fn rocket() -> _ {
                 .to_cors()
                 .unwrap(),
         )
-        .mount("/", routes![items])
+        .mount("/", routes![items, cats])
 }
