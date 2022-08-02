@@ -1,17 +1,17 @@
 import { Card, Grid, Typography } from "@mui/material";
 
-type Props = {
+export type CardProps = {
   title: string;
   subtitle?: string;
   image?: string;
   alt?: string;
 };
 
-export const ItemCard = ({ title, subtitle, image, alt }: Props) => {
+export const ItemCard = ({ title, subtitle, image, alt }: CardProps) => {
   console.log(image);
 
   return (
-    <Card>
+    <Card className="p-3 m-3">
       <Grid container>
         {image && (
           <Grid item xs={5}>
