@@ -9,7 +9,7 @@ export const Cats = observer(() => {
   return (
     <>
       {cats.map((cat, index) => (
-        <ItemCard key={index} title={cat.name} />
+        <ItemCard key={index} title={cat.name} image={cat.image} />
       ))}
     </>
   );

@@ -5,5 +5,5 @@ export interface Item {
 
 export interface Cat {
   name: string;
-  image_url: string;
+  image: string;
 }

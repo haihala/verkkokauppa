@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 
 import { Cat, Item } from "./models";
 
@@ -28,7 +28,11 @@ export class Store {
 
   // Awaiting can't be done in the constructor
   public async populate() {
-    this.items = await this.get<Item[]>("items");
-    this.cats = await this.get<Cat[]>("cats");
+    const items = await this.get<Item[]>("items");
+    const cats = await this.get<Cat[]>("cats");
+    runInAction(() => {
+      this.items = items;
+      this.cats = cats;
+    });
   }
 }
