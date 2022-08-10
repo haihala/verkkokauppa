@@ -6,4 +6,4 @@ Yksinkertainen webdev osaamisdemo.
 Frontissa mentiin tutulla ja turvallisella react+typescript combolla. Tyylittelyyn käytettiin tailwindcss, modular css ja material ui.
 
 ## Backend
-Backendissä levitetään rustin hienoutta Rocket frameworkin avulla. Todennäköisesti overkill tähän, mutta ainakin tarjoaa kaikki tarvittavat ominaisuudet.
+Backendissä aloitettiin levittämällä rustin ilosanomaa Rocket frameworkin avulla, mutta jotta saa yhdellä kivellä kaksi lintua, vaihdettiin python fastapiin.
