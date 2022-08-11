@@ -1,8 +1,8 @@
+from backend.login import get_user_id
 from backend.utils import dict_to_model_list
 from backend.models import Cat, Item, Order
 
-from fastapi import APIRouter, HTTPException, Request, Depends, status
-from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from fastapi import APIRouter, HTTPException, Depends, status
 
 from uuid import uuid4
 import secrets
@@ -52,7 +52,7 @@ def get_items():
 
 
 @router.post("/buy")
-async def buy(orders: list[Order]):
+async def buy(orders: list[Order], user_id: int = Depends(get_user_id)):
     if any(str(order.product) not in items for order in orders):
         raise HTTPException(status_code=404, detail="Item not found")
     return orders
@@ -64,33 +64,7 @@ async def get_cats():
 
 
 @router.post("/adopt/<uuid>")
-async def get_cats(uuid):
+async def get_cats(uuid, user_id: int = Depends(get_user_id)):
     if uuid not in cats:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     del cats[uuid]
-
-
-@router.get("/logged-in")
-async def get_login(request: Request):
-    if not request.session.get("authenticated"):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
-
-
-security = HTTPBasic()
-
-
-@router.put("/login")
-async def put_login(request: Request, credentials: HTTPBasicCredentials = Depends(security)):
-    # TODO: Un-hardcode this
-    correct_username = secrets.compare_digest(
-        credentials.username, "kisukauppa")
-    correct_password = secrets.compare_digest(
-        credentials.password, "passu")
-    if correct_username and correct_password:
-        request.session["authenticated"] = True
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password",
-            headers={"WWW-Authenticate": "Basic"},
-        )
