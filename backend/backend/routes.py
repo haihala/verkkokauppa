@@ -1,7 +1,7 @@
 from backend.utils import dict_to_model_list
 from backend.models import Cat, Item, Order
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 
 from uuid import uuid4
 
@@ -66,3 +66,13 @@ async def get_cats(uuid):
     if uuid not in cats:
         raise HTTPException(status_code=404, detail="Item not found")
     del cats[uuid]
+
+
+@router.get("/login")
+async def get_login(request: Request):
+    print(request.session)
+
+
+@router.put("/login")
+async def put_login(request: Request):
+    request.session["test"] = 2
