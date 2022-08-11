@@ -1,5 +1,5 @@
 from uuid import UUID
-from pydantic import BaseModel
+from pydantic import BaseModel, PositiveInt, PositiveFloat
 
 
 class Cat(BaseModel):
@@ -11,10 +11,10 @@ class Cat(BaseModel):
 class Item(BaseModel):
     name: str
     image: str
-    price: float
+    price: PositiveFloat
     id: UUID
 
 
 class Order(BaseModel):
     product: UUID
-    amount: int
+    amount: PositiveInt
