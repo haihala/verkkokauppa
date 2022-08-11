@@ -1,7 +1,7 @@
 from backend.utils import dict_to_model_list
 from backend.models import Cat, Item, Order
 
-from fastapi import APIRouter, HTTPException, Request, Depends
+from fastapi import APIRouter, HTTPException, Request, Depends, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
 from uuid import uuid4
@@ -66,14 +66,14 @@ async def get_cats():
 @router.post("/adopt/<uuid>")
 async def get_cats(uuid):
     if uuid not in cats:
-        raise HTTPException(status_code=404, detail="Item not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     del cats[uuid]
 
 
 @router.get("/logged-in")
 async def get_login(request: Request):
     if not request.session.get("authenticated"):
-        raise HTTPException(status_code=401, detail="Not logged in")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 
 security = HTTPBasic()
@@ -89,4 +89,8 @@ async def put_login(request: Request, credentials: HTTPBasicCredentials = Depend
     if correct_username and correct_password:
         request.session["authenticated"] = True
     else:
-        raise HTTPException(status_code=401, detail="Not logged in")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            headers={"WWW-Authenticate": "Basic"},
+        )
