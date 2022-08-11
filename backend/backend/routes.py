@@ -49,16 +49,16 @@ def get_items():
     return dict_to_model_list(items)
 
 
-@router.get("/cats", response_model=list[Cat])
-async def get_cats():
-    return dict_to_model_list(cats)
-
-
 @router.post("/buy")
 async def buy(orders: list[Order]):
     if any(str(order.product) not in items for order in orders):
         raise HTTPException(status_code=404, detail="Item not found")
     return orders
+
+
+@router.get("/cats", response_model=list[Cat])
+async def get_cats():
+    return dict_to_model_list(cats)
 
 
 @router.post("/adopt/<uuid>")
@@ -68,7 +68,7 @@ async def get_cats(uuid):
     del cats[uuid]
 
 
-@router.get("/login")
+@router.get("/logged-in")
 async def get_login(request: Request):
     print(request.session)
 
