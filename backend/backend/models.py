@@ -13,3 +13,8 @@ class Item(BaseModel):
     image: str
     price: float
     id: UUID
+
+
+class Order(BaseModel):
+    product: UUID
+    amount: int

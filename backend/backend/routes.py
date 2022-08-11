@@ -1,5 +1,5 @@
 from backend.utils import dict_to_model_list
-from backend.models import Cat, Item
+from backend.models import Cat, Item, Order
 
 from fastapi import APIRouter, HTTPException
 
@@ -8,7 +8,7 @@ from uuid import uuid4
 router = APIRouter()
 
 items = {
-    uuid4(): {
+    str(uuid4()): {
         "name": "Cat food",
         "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Cat_and_Cat_Foods.jpg/1280px-Cat_and_Cat_Foods.jpg",
         "price": 3.50,
@@ -54,9 +54,15 @@ async def get_cats():
     return dict_to_model_list(cats)
 
 
+@router.post("/buy")
+async def buy(orders: list[Order]):
+    if any(str(order.product) not in items for order in orders):
+        raise HTTPException(status_code=404, detail="Item not found")
+    return orders
+
+
 @router.post("/adopt/<uuid>")
 async def get_cats(uuid):
     if uuid not in cats:
         raise HTTPException(status_code=404, detail="Item not found")
-    else:
-        del cats[uuid]
+    del cats[uuid]
