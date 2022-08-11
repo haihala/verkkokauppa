@@ -48,8 +48,8 @@ def product_exists(uuid: UUID) -> bool:
     return any(uuid == product_id for product_id in _items)
 
 
-def order_items(orders: list[Order], user: int):
-    ...
+def order_items(orders: list[Order], user: int) -> list[Order]:
+    return orders
 
 
 def get_cats() -> list[Cat]:
@@ -61,7 +61,9 @@ def cat_exists(uuid: UUID) -> bool:
 
 
 def adopt_cat(uuid: UUID, user: int):
+    cat = _cats[uuid]
     del _cats[uuid]
+    return cat
 
 
 def _dict_to_model_list(dict_input: dict[str, dict[str, Any]]) -> list[dict]:
