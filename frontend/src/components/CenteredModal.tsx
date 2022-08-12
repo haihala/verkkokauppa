@@ -2,12 +2,13 @@ import { Modal, Paper } from "@mui/material";
 
 type Props = {
   open: boolean;
+  onClose: () => void;
   children: React.ReactNode;
 };
 
-export const CenteredModal: React.FC<Props> = ({ open, children }) => {
+export const CenteredModal: React.FC<Props> = ({ open, onClose, children }) => {
   return (
-    <Modal open={open}>
+    <Modal open={open} onClose={() => onClose()}>
       <Paper
         sx={{
           top: "50%",

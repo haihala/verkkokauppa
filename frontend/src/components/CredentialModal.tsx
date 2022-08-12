@@ -37,7 +37,10 @@ export const CredentialModal = observer(() => {
   };
 
   return (
-    <CenteredModal open={store.promptForLogin}>
+    <CenteredModal
+      open={store.promptForLogin}
+      onClose={() => store.cancelLogin()}
+    >
       <Typography variant="h3">Login</Typography>
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-3">

@@ -11,9 +11,9 @@ export class Store {
   // TODO: Could store theses in localstorage to persist over reloads
   username?: string;
   password?: string;
-  actionAfterLogin?: () => void;
-
   cart: Record<string, number>;
+
+  actionAfterLogin?: () => void;
 
   constructor(backend: string) {
     this.backendBaseUrl = backend;
@@ -38,6 +38,14 @@ export class Store {
     }
 
     runInAction(() => {
+      this.actionAfterLogin = undefined;
+    });
+  };
+
+  public cancelLogin = () => {
+    runInAction(() => {
+      this.username = undefined;
+      this.password = undefined;
       this.actionAfterLogin = undefined;
     });
   };
@@ -126,7 +134,7 @@ export class Store {
       });
 
       if (cart.length > 0) {
-        await this.post("order", JSON.stringify(cart));
+        await this.post("buy", JSON.stringify(cart));
         runInAction(() => {
           this.cart = {};
         });
