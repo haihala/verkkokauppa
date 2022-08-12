@@ -4,19 +4,19 @@ import { Buffer } from "buffer";
 import { Cat, Item } from "./models";
 
 export class Store {
-  backend_base_url: string;
+  backendBaseUrl: string;
   items: Item[];
   cats: Cat[];
 
   // TODO: Could store theses in localstorage to persist over reloads
   username?: string;
   password?: string;
-  action_after_login?: () => void;
+  actionAfterLogin?: () => void;
 
   cart: Record<string, number>;
 
   constructor(backend: string) {
-    this.backend_base_url = backend;
+    this.backendBaseUrl = backend;
 
     this.items = [];
     this.cats = [];
@@ -31,23 +31,23 @@ export class Store {
       this.password = password;
     });
 
-    if (this.action_after_login) {
-      this.action_after_login();
+    if (this.actionAfterLogin) {
+      this.actionAfterLogin();
     } else {
       console.error("Undefined action after login");
     }
 
     runInAction(() => {
-      this.action_after_login = undefined;
+      this.actionAfterLogin = undefined;
     });
   };
 
-  get logged_in() {
+  get loggedIn() {
     return this.username !== undefined && this.password !== undefined;
   }
 
-  get prompt_for_login() {
-    return !!this.action_after_login;
+  get promptForLogin() {
+    return !!this.actionAfterLogin;
   }
 
   get credentials() {
@@ -67,11 +67,11 @@ export class Store {
       "Accept-Control-Allow-Origin": "*",
     };
 
-    if (this.logged_in) {
+    if (this.loggedIn) {
       headers["Authorization"] = `Basic ${this.credentials}`;
     }
 
-    const request = await fetch(`http://${this.backend_base_url}/${endpoint}`, {
+    const request = await fetch(`http://${this.backendBaseUrl}/${endpoint}`, {
       method,
       headers,
       body,
@@ -97,30 +97,30 @@ export class Store {
     });
   }
 
-  public async adopt(cat_id: string) {
+  public async adopt(catId: string) {
     // TODO: Proper query param handling
-    if (this.logged_in) {
-      await this.post(`adopt?uuid=${cat_id}`);
+    if (this.loggedIn) {
+      await this.post(`adopt?uuid=${catId}`);
       runInAction(() => {
-        this.cats = this.cats.filter((cat) => cat.id !== cat_id);
+        this.cats = this.cats.filter((cat) => cat.id !== catId);
       });
     } else {
-      this.action_after_login = () => {
-        this.adopt(cat_id);
+      this.actionAfterLogin = () => {
+        this.adopt(catId);
       };
     }
   }
 
-  addToCart(item_id: string) {
-    if (item_id in this.cart) {
-      this.cart[item_id]++;
+  addToCart(itemId: string) {
+    if (itemId in this.cart) {
+      this.cart[itemId]++;
     } else {
-      this.cart[item_id] = 1;
+      this.cart[itemId] = 1;
     }
   }
 
   public async order() {
-    if (this.logged_in) {
+    if (this.loggedIn) {
       const cart = Object.entries(this.cart).map(([id, amount]) => {
         return { product: id, amount };
       });
@@ -132,7 +132,7 @@ export class Store {
         });
       }
     } else {
-      this.action_after_login = () => {
+      this.actionAfterLogin = () => {
         this.order();
       };
     }
