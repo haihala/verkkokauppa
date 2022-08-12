@@ -11,13 +11,16 @@ export class Store {
   // TODO: Could store theses in localstorage to persist over reloads
   username?: string;
   password?: string;
-  action_after_login?: { action: "adoption"; data: any };
+  action_after_login?: () => void;
+
+  cart: Record<string, number>;
 
   constructor(backend: string) {
     this.backend_base_url = backend;
 
     this.items = [];
     this.cats = [];
+    this.cart = {};
 
     makeAutoObservable(this);
   }
@@ -28,13 +31,10 @@ export class Store {
       this.password = password;
     });
 
-    switch (this.action_after_login?.action) {
-      case "adoption":
-        this.adopt(this.action_after_login.data);
-        break;
-      default:
-        console.error("Unhandled action");
-        break;
+    if (this.action_after_login) {
+      this.action_after_login();
+    } else {
+      console.error("Undefined action after login");
     }
 
     runInAction(() => {
@@ -57,7 +57,11 @@ export class Store {
     );
   }
 
-  async request<T>(method: string, endpoint: string): Promise<T> {
+  async request<T>(
+    method: string,
+    endpoint: string,
+    body?: string
+  ): Promise<T> {
     let headers: Record<string, string> = {
       "Content-Type": "application/json",
       "Accept-Control-Allow-Origin": "*",
@@ -70,6 +74,7 @@ export class Store {
     const request = await fetch(`http://${this.backend_base_url}/${endpoint}`, {
       method,
       headers,
+      body,
     });
     return await request.json();
   }
@@ -78,8 +83,8 @@ export class Store {
     return await this.request("GET", endpoint);
   }
 
-  async post<T>(endpoint: string): Promise<T> {
-    return await this.request("POST", endpoint);
+  async post<T>(endpoint: string, json?: string): Promise<T> {
+    return await this.request("POST", endpoint, json);
   }
 
   // Awaiting can't be done in the constructor
@@ -100,7 +105,36 @@ export class Store {
         this.cats = this.cats.filter((cat) => cat.id !== cat_id);
       });
     } else {
-      this.action_after_login = { action: "adoption", data: cat_id };
+      this.action_after_login = () => {
+        this.adopt(cat_id);
+      };
+    }
+  }
+
+  addToCart(item_id: string) {
+    if (item_id in this.cart) {
+      this.cart[item_id]++;
+    } else {
+      this.cart[item_id] = 1;
+    }
+  }
+
+  public async order() {
+    if (this.logged_in) {
+      const cart = Object.entries(this.cart).map(([id, amount]) => {
+        return { product: id, amount };
+      });
+
+      if (cart.length > 0) {
+        await this.post("order", JSON.stringify(cart));
+        runInAction(() => {
+          this.cart = {};
+        });
+      }
+    } else {
+      this.action_after_login = () => {
+        this.order();
+      };
     }
   }
 }

@@ -5,18 +5,23 @@ import { GridLayout } from "../components";
 import { useStore } from "../context";
 
 export const Items = observer(() => {
-  const { items } = useStore();
+  const store = useStore();
 
   return (
     <GridLayout
-      items={items.map((item) => {
+      items={store.items.map((item) => {
         return {
           title: item.name,
           image: item.image,
           element: (
             <div className="flex gap-3">
               <div className="my-auto">{item.price}€</div>
-              <Button variant="contained">Add to cart</Button>
+              <Button
+                variant="contained"
+                onClick={() => store.addToCart(item.id)}
+              >
+                Add to cart
+              </Button>
             </div>
           ),
         };
