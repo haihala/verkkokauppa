@@ -31,6 +31,8 @@ export const Cart = observer(() => {
             </div>
           );
         })}
+
+        <Typography>Total: {store.cartTotal}€</Typography>
         <Button
           variant="contained"
           onClick={() => {

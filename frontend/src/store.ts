@@ -119,7 +119,17 @@ export class Store {
     }
   }
 
-  addToCart(itemId: string) {
+  get cartTotal() {
+    return Object.entries(this.cart)
+      .map(
+        ([itemId, amount]) =>
+          (this.items.find((item) => item.id === itemId)?.price || 0) * amount
+      )
+      .reduce((a, b) => a + b, 0)
+      .toFixed(2);
+  }
+
+  public addToCart(itemId: string) {
     if (itemId in this.cart) {
       this.cart[itemId]++;
     } else {
