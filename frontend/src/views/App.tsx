@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { CredentialModal } from "../components/CredentialModal";
 import { TopBar } from "../components/TopBar";
 import { Cats } from "./Cats";
 import { Home } from "./Home";
@@ -14,6 +15,7 @@ export const App: React.FC = () => {
         <Route path="items" element={<Items />} />
         <Route path="cats" element={<Cats />} />
       </Routes>
+      <CredentialModal />
     </BrowserRouter>
   );
 };

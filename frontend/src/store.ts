@@ -7,22 +7,47 @@ export class Store {
   backend_base_url: string;
   items: Item[];
   cats: Cat[];
+
+  // TODO: Could store theses in localstorage to persist over reloads
   username?: string;
   password?: string;
+  action_after_login?: { action: "adoption"; data: any };
 
   constructor(backend: string) {
     this.backend_base_url = backend;
 
     this.items = [];
     this.cats = [];
-    this.username = "kisukauppa";
-    this.password = "passu";
 
     makeAutoObservable(this);
   }
 
+  public login = (username: string, password: string) => {
+    runInAction(() => {
+      this.username = username;
+      this.password = password;
+    });
+
+    switch (this.action_after_login?.action) {
+      case "adoption":
+        this.adopt(this.action_after_login.data);
+        break;
+      default:
+        console.error("Unhandled action");
+        break;
+    }
+
+    runInAction(() => {
+      this.action_after_login = undefined;
+    });
+  };
+
   get logged_in() {
     return this.username !== undefined && this.password !== undefined;
+  }
+
+  get prompt_for_login() {
+    return !!this.action_after_login;
   }
 
   get credentials() {
@@ -69,9 +94,13 @@ export class Store {
 
   public async adopt(cat_id: string) {
     // TODO: Proper query param handling
-    await this.post(`adopt?uuid=${cat_id}`);
-    runInAction(() => {
-      this.cats = this.cats.filter((cat) => cat.id !== cat_id);
-    });
+    if (this.logged_in) {
+      await this.post(`adopt?uuid=${cat_id}`);
+      runInAction(() => {
+        this.cats = this.cats.filter((cat) => cat.id !== cat_id);
+      });
+    } else {
+      this.action_after_login = { action: "adoption", data: cat_id };
+    }
   }
 }
