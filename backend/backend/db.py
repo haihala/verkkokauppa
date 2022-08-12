@@ -63,7 +63,7 @@ def cat_exists(uuid: UUID) -> bool:
 def adopt_cat(uuid: UUID, user: int):
     cat = _cats[uuid]
     del _cats[uuid]
-    return cat
+    return {"id": uuid} | cat
 
 
 def _dict_to_model_list(dict_input: dict[str, dict[str, Any]]) -> list[dict]:
