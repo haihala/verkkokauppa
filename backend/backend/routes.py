@@ -32,7 +32,7 @@ async def get_cats():
 
 
 @router.post(
-    "/adopt/<uuid>",
+    "/adopt",
     response_model=Cat,
     responses={
         404: {"description": "The cat was not found"},
