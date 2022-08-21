@@ -1,15 +1,17 @@
 import { Button } from "@mui/material";
-import { observer } from "mobx-react";
 
 import { GridLayout } from "../components";
-import { useStore } from "../context";
+import { Cat } from "../utils/models";
 
-export const Cats = observer(() => {
-  const store = useStore();
+type Props = {
+  cats: Cat[];
+  adopt: (id: string) => void;
+};
 
+export const Cats = ({ cats, adopt }: Props) => {
   return (
     <GridLayout
-      items={store.cats.map((cat) => {
+      items={cats.map((cat) => {
         return {
           title: cat.name,
           image: cat.image,
@@ -17,7 +19,7 @@ export const Cats = observer(() => {
             <Button
               variant="contained"
               sx={{ maxWidth: "5rem" }}
-              onClick={() => store.adopt(cat.id)}
+              onClick={() => adopt(cat.id)}
             >
               Adopt
             </Button>
@@ -26,4 +28,4 @@ export const Cats = observer(() => {
       })}
     />
   );
-});
+};

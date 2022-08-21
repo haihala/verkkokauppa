@@ -1,9 +1,10 @@
 import { AppBar, Toolbar, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useProducts } from "../utils/customHooks";
 
 import { Cart } from "./Cart";
 
-export const TopBar = () => {
+export const TopBar = (props: ReturnType<typeof useProducts>) => {
   const links = [
     { to: "/", text: "Home" },
     { to: "cats", text: "Cats" },
@@ -25,7 +26,7 @@ export const TopBar = () => {
             </Typography>
           ))}
         </Toolbar>
-        <Cart />
+        <Cart {...props} />
       </div>
     </AppBar>
   );

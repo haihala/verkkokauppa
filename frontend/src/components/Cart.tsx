@@ -1,16 +1,26 @@
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Button, IconButton, Typography } from "@mui/material";
-import { observer } from "mobx-react";
 import { useState } from "react";
+import { useProducts } from "../utils/customHooks";
 
-import { useStore } from "../context";
 import { CenteredModal } from "./CenteredModal";
 
-export const Cart = observer(() => {
+export const Cart = ({
+  cart,
+  products,
+  submitOrder,
+}: ReturnType<typeof useProducts>) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const store = useStore();
+  console.log("Cart render");
 
-  const itemsInCart = Object.keys(store.cart).length > 0;
+  const itemsInCart = Object.keys(cart).length > 0;
+  const totalPrice = Object.entries(cart)
+    .map(
+      ([itemId, amount]) =>
+        (products?.find((item) => item.id === itemId)?.price || 0) * amount
+    )
+    .reduce((a, b) => a + b, 0)
+    .toFixed(2);
 
   return (
     <>
@@ -23,8 +33,8 @@ export const Cart = observer(() => {
       )}
       <CenteredModal open={modalOpen} onClose={() => setModalOpen(false)}>
         <Typography variant="h3">Cart</Typography>
-        {Object.entries(store.cart).map(([itemId, amount], index) => {
-          const item = store.items.find((i) => i.id === itemId);
+        {Object.entries(cart).map(([itemId, amount], index) => {
+          const item = products.find((i) => i.id === itemId);
           return (
             <div key={index}>
               {item?.name} - {amount}
@@ -32,11 +42,11 @@ export const Cart = observer(() => {
           );
         })}
 
-        <Typography>Total: {store.cartTotal}€</Typography>
+        <Typography>Total: {totalPrice}€</Typography>
         <Button
           variant="contained"
           onClick={() => {
-            store.order();
+            submitOrder();
             setModalOpen(false);
           }}
           sx={{ marginTop: "1rem" }}
@@ -46,4 +56,4 @@ export const Cart = observer(() => {
       </CenteredModal>
     </>
   );
-});
+};

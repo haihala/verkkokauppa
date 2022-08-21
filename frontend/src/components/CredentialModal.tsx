@@ -5,10 +5,9 @@ import {
   InputLabel,
   Typography,
 } from "@mui/material";
-import { observer } from "mobx-react";
 import { useState } from "react";
+import { useLogin } from "../utils/customHooks";
 
-import { useStore } from "../context";
 import { CenteredModal } from "./CenteredModal";
 
 const defaultValues = {
@@ -16,9 +15,11 @@ const defaultValues = {
   password: "",
 };
 
-export const CredentialModal = observer(() => {
-  const store = useStore();
-
+export const CredentialModal = ({
+  login,
+  requestedLogin,
+  cancelLogin,
+}: ReturnType<typeof useLogin>) => {
   const [formValues, setFormValues] = useState(defaultValues);
 
   const handleInputChange: React.ChangeEventHandler<
@@ -33,14 +34,11 @@ export const CredentialModal = observer(() => {
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    store.login(formValues.username, formValues.password);
+    login(formValues.username, formValues.password);
   };
 
   return (
-    <CenteredModal
-      open={store.promptForLogin}
-      onClose={() => store.cancelLogin()}
-    >
+    <CenteredModal open={requestedLogin} onClose={() => cancelLogin()}>
       <Typography variant="h3">Login</Typography>
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-3">
@@ -68,4 +66,4 @@ export const CredentialModal = observer(() => {
       </form>
     </CenteredModal>
   );
-});
+};
