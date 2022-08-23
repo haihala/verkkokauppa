@@ -1,9 +1,13 @@
-from backend.routes import router
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from . import routes, db
+
+db.Base.metadata.create_all(bind=db.engine)
+
 app = FastAPI()
+
 
 origins = [
     "http://localhost",
@@ -19,4 +23,4 @@ app.add_middleware(
 )
 
 
-app.include_router(router)
+app.include_router(routes.router)

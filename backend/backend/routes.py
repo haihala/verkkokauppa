@@ -1,16 +1,18 @@
 from uuid import UUID
-from backend.login import get_user_id
-from backend.models import Cat, Item, Order
-import backend.db as db
-
+from sqlalchemy.orm import Session
 from fastapi import APIRouter, HTTPException, Depends, status
+
+from .db import get_db
+from .schemas import Cat, Item, Order
+from . import crud, login
+
 
 router = APIRouter()
 
 
 @router.get("/items", response_model=list[Item])
-def get_items():
-    return db.get_items()
+def get_items(db: Session = Depends(get_db)):
+    return crud.get_items(db)
 
 
 @router.post(
@@ -20,15 +22,15 @@ def get_items():
         404: {"description": "An item was not found"},
     },
 )
-async def buy(orders: list[Order], user_id: int = Depends(get_user_id)) -> list[Order]:
-    if all(db.product_exists(order.product) for order in orders):
-        return db.order_items(orders, user_id)
+async def buy(orders: list[Order], user_id: int = Depends(login.get_user_id), db: Session = Depends(get_db)) -> list[Order]:
+    if all(crud.product_exists(db, order.product) for order in orders):
+        return crud.order_items(db, orders, user_id)
     raise HTTPException(status_code=404, detail="Item not found")
 
 
 @router.get("/cats", response_model=list[Cat])
-async def get_cats():
-    return db.get_cats()
+async def get_cats(db: Session = Depends(get_db)):
+    return crud.get_cats(db)
 
 
 @router.post(
@@ -38,7 +40,7 @@ async def get_cats():
         404: {"description": "The cat was not found"},
     },
 )
-async def adopt_cat(uuid: UUID, user_id: int = Depends(get_user_id)) -> Cat:
-    if db.cat_exists(uuid):
-        return db.adopt_cat(uuid, user_id)
+async def adopt_cat(uuid: UUID, user_id: int = Depends(login.get_user_id), db: Session = Depends(get_db)) -> Cat:
+    if crud.cat_exists(db, uuid):
+        return crud.adopt_cat(db, uuid, user_id)
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
