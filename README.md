@@ -20,6 +20,7 @@ Käynnistyy (linuxilla):
 cd backend
 python -m venv venv
 venv/bin/python -m pip install -r requirements.txt
+venv/bin/python backend populate
 venv/bin/uvicorn backend:app --reload
 ```
 
@@ -28,6 +29,7 @@ Windows rakentaa venv erilailla, joten:
 cd backend
 python -m venv venv
 .\venv\Scripts\python.exe -m pip install -r .\requirements.txt
+.\venv\Scripts\python.exe backend populate
 .\venv\Scripts\uvicorn.exe backend:app --reload
 ```
 

@@ -2,9 +2,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from . import routes, db
+from .database import Base, engine, populate, get_db
+from .routes import router
 
-db.Base.metadata.create_all(bind=db.engine)
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -23,4 +24,7 @@ app.add_middleware(
 )
 
 
-app.include_router(routes.router)
+app.include_router(router)
+
+if __name__ == "__main__":
+    populate.populate(get_db())
