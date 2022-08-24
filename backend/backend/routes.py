@@ -3,14 +3,14 @@ from sqlalchemy.orm import Session
 from fastapi import APIRouter, HTTPException, Depends, status
 
 from .database import get_db, operations
-from .schemas import Cat, Item, Order
+from .schemas import Cat, Product, Order
 from .login import get_user_id
 
 
 router = APIRouter()
 
 
-@router.get("/items", response_model=list[Item])
+@router.get("/items", response_model=list[Product])
 def get_items(db: Session = Depends(get_db)):
     return operations.get_items(db)
 
