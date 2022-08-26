@@ -18,9 +18,9 @@ Elämä helpottuu jos VSCode formatoi koodia aina kun tallennat tiedoston. Sen s
 - Hae "format on save", varmista että ruudussa on rasti
 
 ## Swagger
-FastAPI luo automaattisesti dokumentaation ja testaustyökalun backendille. Sen löytää osoitteesta http://127.0.0.1:8000/docs#/
+FastAPI luo automaattisesti dokumentaation ja testaustyökalun backendille. Sen löytää osoitteesta http://127.0.0.1:8000/docs#/ kun backend on käynnissä.
 
-Swaggerissä voi kokeilla eri endpointteja ja nähdä mitä ne palauttavat. Authentication
+Swaggerissä voi kokeilla eri endpointteja ja nähdä mitä ne palauttavat. Authentication kannattaa tehdä Swaggerin omalla jutulla sen sijaan että antais sille käyttäjän/salasanan kun se popuppaa requestia tehdessä. (lukko nappi joko oikealla ylhäälää tai relevantissa endpointissa)
 
 # Tehtävät
 Tee mikä tuntuu mielekkäältä. Etenkin frontissa on vaikea välillä sanoa koska joku on valmis, niin älä jää viilaamaan jotain äärettömän pitkään.
