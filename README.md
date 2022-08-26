@@ -34,3 +34,7 @@ python -m venv venv
 ```
 
 Riippuen miten python on asennettu, windows python haluaa ehkä tulla kutsutuksi nimellä `py`, jolloin toinen rivi muuttuu.
+
+# PVL opiskelijat
+
+Tehtäviä löytää [täältä](tasks.md)
