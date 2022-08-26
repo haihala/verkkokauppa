@@ -85,7 +85,7 @@ export const useCats = (auth: ReturnType<typeof useLogin>) => {
     callback: useCallback((data: Cat[]) => setCats(data), []),
   });
 
-  useFetch(auth, `adopt?uuid=${adoptId}`, {
+  useFetch(auth, `adopt?cat_id=${adoptId}`, {
     method: "POST",
     requireLogin: true,
     send: !!adoptId,
@@ -105,7 +105,7 @@ export const useProducts = (auth: ReturnType<typeof useLogin>) => {
   const [cart, setCart] = useState<Record<string, number>>({});
   const [submit, setSumbit] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
-  useFetch<Product[]>(auth, "items", {
+  useFetch<Product[]>(auth, "products", {
     send: !products.length,
     callback: useCallback((data: Product[]) => setProducts(data), []),
   });
