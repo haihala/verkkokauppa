@@ -1,9 +1,9 @@
 # Verkkokauppa
 
-Yksinkertainen webdev osaamisdemo.
+Yksinkertainen webdev osaamisdemo. Kisukauppa, mistä voi adoptoida kissoja ja ostaa niille tarvikkeita.
 
 ## Frontend
-Frontissa mentiin tutulla ja turvallisella react+typescript combolla. Tyylittelyyn käytettiin tailwindcss, modular css ja material ui.
+React SPA
 
 Käynnistyy:
 ```sh
@@ -13,7 +13,7 @@ yarn start
 ```
 
 ## Backend
-Backendissä aloitettiin levittämällä rustin ilosanomaa Rocket frameworkin avulla, mutta jotta saa yhdellä kivellä kaksi lintua, vaihdettiin python fastapiin.
+Python + FastAPI backend
 
 Käynnistyy (linuxilla):
 ```sh
