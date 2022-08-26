@@ -30,7 +30,7 @@ async def buy(orders: list[Order], user_id: int = Depends(get_user_id), db: Sess
 
 @router.get("/cats", response_model=list[Cat])
 async def get_cats(db: Session = Depends(get_db)):
-    return operations.get_cats(db)
+    return operations.get_ownerless_cats(db)
 
 
 @router.post(
@@ -40,7 +40,7 @@ async def get_cats(db: Session = Depends(get_db)):
         404: {"description": "The cat was not found"},
     },
 )
-async def adopt_cat(uuid: UUID, user_id: int = Depends(get_user_id), db: Session = Depends(get_db)) -> Cat:
-    if operations.cat_exists(db, uuid):
-        return operations.adopt_cat(db, uuid, user_id)
+async def adopt_cat(cat_id: str, user_id: int = Depends(get_user_id), db: Session = Depends(get_db)) -> Cat:
+    if operations.cat_exists(db, cat_id):
+        return operations.adopt_cat(db, cat_id, user_id)
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
