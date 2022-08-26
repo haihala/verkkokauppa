@@ -22,7 +22,7 @@ class Product(BaseModel):
 
 
 class Order(BaseModel):
-    product: UUID
+    product: str
     amount: PositiveInt
 
     class Config:

@@ -22,9 +22,9 @@ def get_items(db: Session = Depends(get_db)):
         404: {"description": "An item was not found"},
     },
 )
-async def buy(orders: list[Order], user_id: int = Depends(get_user_id), db: Session = Depends(get_db)) -> list[Order]:
+async def buy(orders: list[Order], user_id: int = Depends(get_user_id), db: Session = Depends(get_db)):
     if all(operations.product_exists(db, order.product) for order in orders):
-        return operations.order_items(db, orders, user_id)
+        return operations.order_products(db, orders, user_id)
     raise HTTPException(status_code=404, detail="Item not found")
 
 
@@ -35,12 +35,11 @@ async def get_cats(db: Session = Depends(get_db)):
 
 @router.post(
     "/adopt",
-    response_model=Cat,
     responses={
         404: {"description": "The cat was not found"},
     },
 )
-async def adopt_cat(cat_id: str, user_id: int = Depends(get_user_id), db: Session = Depends(get_db)) -> Cat:
+async def adopt_cat(cat_id: str, user_id: int = Depends(get_user_id), db: Session = Depends(get_db)):
     if operations.cat_exists(db, cat_id):
         return operations.adopt_cat(db, cat_id, user_id)
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)

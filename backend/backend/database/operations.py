@@ -12,8 +12,16 @@ def product_exists(db: Session, product: int) -> bool:
     return db.query(models.Product).filter(models.Product.id == product).first() is not None
 
 
-def order_products(orders: list[schemas.Order]) -> list[schemas.Order]:
-    return orders
+def order_products(db: Session, orders: list[schemas.Order], user_id: str):
+    db_orders = []
+    for order in orders:
+        db_orders.append(models.Order(
+            product_id=order.product,
+            amount=order.amount,
+            user_id=user_id,
+        ))
+    db.add_all(db_orders)
+    db.commit()
 
 
 def get_ownerless_cats(db: Session):
