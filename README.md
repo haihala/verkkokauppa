@@ -19,23 +19,25 @@ Käynnistyy (linuxilla):
 ```sh
 cd backend
 python -m venv venv
-venv/bin/python -m pip install -r requirements.txt
-venv/bin/python backend populate
-venv/bin/uvicorn backend:app --reload
+venv/bin/activate
+pip install -r requirements.txt
+python backend populate
+uvicorn backend:app --reload
 ```
 
 Windows rakentaa venv erilailla, joten:
 ```powershell
 cd backend
 python -m venv venv
-.\venv\Scripts\python.exe -m pip install -r .\requirements.txt
-.\venv\Scripts\python.exe backend populate
-.\venv\Scripts\uvicorn.exe backend:app --reload
+.\venv\Scripts\activate.bat
+pip install -r requirements.txt
+python backend populate
+uvicorn backend:app --reload
 ```
 
 Riippuen miten python on asennettu, windows python haluaa ehkä tulla kutsutuksi nimellä `py`, jolloin toinen rivi muuttuu.
 
 # PVL opiskelijat
-Yarn asentuu: `npm install --global yarn`
-
-Tehtäviä löytää [täältä](tasks.md)
+- Yarn asentuu: `npm install --global yarn`
+- Kun lopettaa niin aja `deactivate`
+- Tehtäviä löytää [täältä](tasks.md)
