@@ -5,7 +5,7 @@ import { TopBar } from "../components/TopBar";
 import { useCats, useLogin, useProducts } from "../utils/customHooks";
 import { Cats } from "./Cats";
 import { Home } from "./Home";
-import { Items } from "./Items";
+import { Products } from "./Products";
 
 export const App: React.FC = () => {
   const auth = useLogin();
@@ -17,7 +17,7 @@ export const App: React.FC = () => {
       <TopBar {...products} />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="items" element={<Items {...products} />} />
+        <Route path="products" element={<Products {...products} />} />
         <Route path="cats" element={<Cats {...cats} />} />
       </Routes>
       <CredentialModal {...auth} />

@@ -4,7 +4,7 @@ from .. import schemas
 from . import models
 
 
-def get_items(db: Session):
+def get_products(db: Session):
     return db.query(models.Product).all()
 
 

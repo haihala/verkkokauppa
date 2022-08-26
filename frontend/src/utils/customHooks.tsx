@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Buffer } from "buffer";
-import { Cat, Item } from "./models";
+import { Cat, Product } from "./models";
 
 export const useLogin = () => {
   // TODO: Read from local storage
@@ -104,10 +104,10 @@ export const useCats = (auth: ReturnType<typeof useLogin>) => {
 export const useProducts = (auth: ReturnType<typeof useLogin>) => {
   const [cart, setCart] = useState<Record<string, number>>({});
   const [submit, setSumbit] = useState(false);
-  const [products, setProducts] = useState<Item[]>([]);
-  useFetch<Item[]>(auth, "items", {
+  const [products, setProducts] = useState<Product[]>([]);
+  useFetch<Product[]>(auth, "items", {
     send: !products.length,
-    callback: useCallback((data: Item[]) => setProducts(data), []),
+    callback: useCallback((data: Product[]) => setProducts(data), []),
   });
 
   useFetch(auth, "buy", {

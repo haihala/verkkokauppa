@@ -10,16 +10,16 @@ from .login import get_user_id
 router = APIRouter()
 
 
-@router.get("/items", response_model=list[Product])
-def get_items(db: Session = Depends(get_db)):
-    return operations.get_items(db)
+@router.get("/products", response_model=list[Product])
+async def get_products(db: Session = Depends(get_db)):
+    return operations.get_products(db)
 
 
 @router.post(
     "/buy",
     response_model=list[Order],
     responses={
-        404: {"description": "An item was not found"},
+        404: {"description": "An invalid product in the order"},
     },
 )
 async def buy(orders: list[Order], user_id: int = Depends(get_user_id), db: Session = Depends(get_db)):

@@ -8,7 +8,7 @@ export const TopBar = (props: ReturnType<typeof useProducts>) => {
   const links = [
     { to: "/", text: "Home" },
     { to: "cats", text: "Cats" },
-    { to: "items", text: "Items" },
+    { to: "products", text: "Products" },
   ];
 
   return (

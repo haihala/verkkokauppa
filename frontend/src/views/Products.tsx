@@ -1,14 +1,14 @@
 import { Button } from "@mui/material";
 
 import { GridLayout } from "../components";
-import { Item } from "../utils/models";
+import { Product } from "../utils/models";
 
 type Props = {
-  products: Item[];
+  products: Product[];
   addToCart: (id: string) => void;
 };
 
-export const Items = ({ products, addToCart }: Props) => {
+export const Products = ({ products, addToCart }: Props) => {
   return (
     <GridLayout
       items={products.map((item) => {
