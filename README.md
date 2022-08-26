@@ -36,5 +36,6 @@ python -m venv venv
 Riippuen miten python on asennettu, windows python haluaa ehkä tulla kutsutuksi nimellä `py`, jolloin toinen rivi muuttuu.
 
 # PVL opiskelijat
+Yarn asentuu: `npm install --global yarn`
 
 Tehtäviä löytää [täältä](tasks.md)
